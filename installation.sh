@@ -16,7 +16,7 @@ echo 'export GO111MODULE=auto' >> ~/.bashrc
 source ~/.bashrc
 go version
 
-# Install mongodb 4.4 for control plane
+# Install mongodb 4.4 for control-plane
 sudo apt -y update
 wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
@@ -28,4 +28,22 @@ sudo systemctl enable mongod
 # User-plane Supporting Packages
 sudo apt -y update
 sudo apt -y install git gcc g++ cmake autoconf libtool pkg-config libmnl-dev libyaml-dev
+
+# Linux Host Network Settings
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo iptables -t nat -A POSTROUTING -o <dn_interface> -j MASQUERADE
+sudo iptables -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1400
+sudo systemctl stop ufw
+sudo systemctl disable ufw
+
+# install control-plane
+cd ~
+git clone --recursive -b v3.3.0 -j `nproc` https://github.com/free5gc/free5gc.git
+cd free5gc
+
+
+
+
+
+
 
