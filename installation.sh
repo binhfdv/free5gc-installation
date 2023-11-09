@@ -1,4 +1,6 @@
 ### https://free5gc.org/guide/3-install-free5gc/#a-prerequisites ###
+### ubuntu 20.04
+
 
 # remove go
 sudo rm -rf /usr/local/go
@@ -40,6 +42,28 @@ sudo systemctl disable ufw
 cd ~
 git clone --recursive -b v3.3.0 -j `nproc` https://github.com/free5gc/free5gc.git
 cd free5gc
+make amf
+make
+
+# Install User Plane Function (UPF)
+git clone -b v0.8.2 https://github.com/free5gc/gtp5g.git
+cd gtp5g
+make
+sudo make install
+cd ~/free5gc
+make upf
+
+# Install WebConsole
+# Note: 2GB or more of OS memory is recommended. WebConsole may be failed to build if memory is less then 1GB.
+sudo apt remove cmdtest yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update
+sudo apt install -y nodejs yarn
+cd ~/free5gc
+make webconsole
+
+
 
 
 
