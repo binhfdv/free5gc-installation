@@ -64,7 +64,12 @@ cd ~/free5gc
 make webconsole
 
 
-
+# The engine "node" is incompatible with this module. Expected version ">=12.0.0". Got "10.19.0"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.nvm/nvm.sh
+nvm install 14
+nvm use 14
+node -v
 
 
 
